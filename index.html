@@ -48,7 +48,7 @@
                 </ul>
             </div>
             <<div class="nav-button">
-                <a href="https://drive.google.com/file/d/1yPJW4nDBAyZGl1mFDlJxxQD7606qQS8v/view?usp=sharing" target="_blank" class="btn">
+            </a href="https://drive.google.com/file/d/1yPJW4nDBAyZGl1mFDlJxxQD7606qQS8v/view?usp=sharing" target="_blank" class="btn">
                     Download CV <i class="uil uil-file-alt"></i>
                 </a>
             </div>
@@ -195,6 +195,7 @@
               <h1>Get in touch</h1>
               <span>Do you have a project in your mind, contact me here</span>
             </div>
+                            <div id="form-status" class="form-status" style="display:none;"></div>
             <div class="row">
               <div class="col">
                 <div class="contact-info">
@@ -276,6 +277,54 @@
     
         <!-- ----- MAIN JS ----- -->
         <script src="assets/js/main.js"></script>
+        <script>
+        (function(){
+            // Read status from URL and show a friendly message in #form-status
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var status = params.get('status');
+                var msg = params.get('msg') || '';
+                if (!status) return;
+                var container = document.getElementById('form-status');
+                if (!container) return;
+                if (status === 'success'){
+                    container.className = 'form-status success';
+                    container.textContent = 'Message sent successfully. Thank you — I will reply soon.';
+                } else {
+                    var text = 'Sorry, message failed to send. Please try again.';
+                    if (msg === 'missing_fields') text = 'Please fill in all fields.';
+                    else if (msg === 'invalid_email') text = 'Please enter a valid email address.';
+                    else if (msg === 'invalid_input') text = 'Invalid input detected.';
+                    else if (msg === 'send_failed') text = 'Sending failed on server. (Mail not configured)';
+                    else if (msg === 'saved_to_log') {
+                        text = 'Message saved locally — mail not configured on this server. I will review it.';
+                        container.className = 'form-status success';
+                        container.textContent = text;
+                        container.style.display = 'block';
+                        // clear query and stop
+                        if (window.history && window.history.replaceState){
+                            var url2 = new URL(window.location);
+                            url2.search = '';
+                            window.history.replaceState({}, document.title, url2.toString());
+                        }
+                        return;
+                    }
+                    container.className = 'form-status error';
+                    container.textContent = text;
+                }
+                container.style.display = 'block';
+                // Remove query string so refresh won't resubmit message
+                if (window.history && window.history.replaceState){
+                    var url = new URL(window.location);
+                    url.search = '';
+                    window.history.replaceState({}, document.title, url.toString());
+                }
+            } catch (e) {
+                // fail silently
+                console.error(e);
+            }
+        })();
+        </script>
     </body>
     </html>
    
