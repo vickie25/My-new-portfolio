@@ -2,7 +2,7 @@
 
 A modern, responsive portfolio website showcasing my work as a full-stack developer. Features a clean design, smooth animations, and an interactive contact form.
 
-![Portfolio Preview](assets/images/Profile.png.jpg)
+
 
 ## 🚀 Features
 
